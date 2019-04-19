@@ -5,7 +5,6 @@ export const UsersSchema = new moongose.Schema({
   lastName: String,
   email: {
     type: String,
-    unique: true,
   },
   password: String,
 });
