@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Min, Max, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 export class CreateUserDto {
   @ApiModelProperty()
   readonly _id: number;

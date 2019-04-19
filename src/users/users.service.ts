@@ -5,6 +5,7 @@ import { User } from './intefaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER_MODEL_PROVIDER } from 'src/core/constants';
 import { AuthService } from 'src/core/auth/auth.service';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,7 @@ export class UsersService {
     private readonly authService: AuthService,
   ) { }
 
-  async create(createUserDto: CreateUserDto): Promise<void> {
+  public async create(createUserDto: CreateUserDto): Promise<void> {
     if (await this.userModel.findOne({email: createUserDto.email})) {
       throw new BadRequestException('This email already exists');
     }
@@ -24,7 +25,24 @@ export class UsersService {
     await newUser.save();
   }
 
-  async findAll(): Promise<User[]> {
+  public async login(loginUserDto: LoginUserDto): Promise<string> {
+    const user = await this.findByEmail(loginUserDto.email);
+    if (user) {
+      return await this.authService.signIn(
+        user.id,
+        user.email,
+        loginUserDto.password,
+        user.password, // hashed password
+      );
+    }
+    throw new BadRequestException('Wrong credintials');
+  }
+
+  public async findByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({email});
+  }
+
+  public async findAll(): Promise<User[]> {
     return await this.userModel.find().exec();
   }
 }
