@@ -27,16 +27,21 @@ export class AuthService {
     return bcrypt.compare(password, passwordHash);
   }
 
-  public async login(loginUserDto: LoginUserDto): Promise<string> {
+  public async login(loginUserDto: LoginUserDto): Promise<any> {
     const user = await this.usersServices.findByEmail(loginUserDto.email);
     if (user && await this.compareHash(loginUserDto.password, user.password)) {
       const userJwtPayload: JwtPayload = {
-        email: user.email,
         id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
       };
-      return this.jwtService.sign(userJwtPayload);
+      return {
+        ...userJwtPayload,
+        token: this.jwtService.sign(userJwtPayload),
+      };
     }
-    throw new BadRequestException('Wrong credentials');
+    throw new BadRequestException('wrong credentials');
   }
 
   public async signUp(createUserDto: CreateUserDto): Promise<boolean> {

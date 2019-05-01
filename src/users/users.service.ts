@@ -4,6 +4,7 @@ import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { User } from './intefaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER_MODEL_PROVIDER } from 'src/core/constants';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,5 +27,18 @@ export class UsersService {
 
   public async findAll(): Promise<User[]> {
     return await this.userModel.find().exec();
+  }
+
+  public async findById(id: string): Promise<User> {
+    return await this.userModel
+      .findById(id)
+      .select('-password')
+      .select('-__v')
+      .exec();
+  }
+
+  public async updateUser(id: string, user: Partial<UpdateUserDto>): Promise<User> {
+    await this.userModel.findByIdAndUpdate(id, {$set: user});
+    return this.findById(id);
   }
 }

@@ -10,7 +10,6 @@ export class CreateUserDto {
   readonly firstName: string;
 
   @ApiModelProperty()
-  @IsNotEmpty()
   @Length(1, 36)
   readonly lastName: string;
 
