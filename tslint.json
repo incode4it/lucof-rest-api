@@ -5,6 +5,9 @@
     "no-unused-expression": true
   },
   "rules": {
+    "variable-name": [
+      "allow-leading-underscore"
+    ],
     "quotemark": [true, "single"],
     "member-access": [false],
     "ordered-imports": [false],
