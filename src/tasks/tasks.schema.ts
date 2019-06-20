@@ -2,7 +2,11 @@ import * as moongose from 'mongoose';
 
 export const TasksSchema = new moongose.Schema({
   createdAt: Date,
-  createdBy: moongose.Schema.Types.ObjectId,
+  createdBy: {
+    id: moongose.Schema.Types.ObjectId,
+    firstName: String,
+    lastName: String,
+  },
   title: String,
   description: String,
   online: Boolean,

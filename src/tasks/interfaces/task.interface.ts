@@ -1,9 +1,10 @@
 import { Document } from 'mongoose';
+import { User } from 'src/users/intefaces/user.interface';
 
 export interface ITask extends Document {
   _id: string;
   createdAt: Date;
-  createdBy: string;
+  createdBy: Partial<User>;
   title: string;
   description: string;
   online: boolean;
